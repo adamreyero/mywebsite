@@ -1,0 +1,266 @@
+<html>
+<head>
+	<style>
+	*{padding: 0; margin:0;}
+	canvas{ background: #eeee; display: block; margin: 0 auto;}
+	</style>
+</head>
+<body>
+<canvas id= "myCanvas" width="600" height="800"></canvas>
+<script type="text/javascript">
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+document.addEventListener("mousemove", mouseMoveHandler, false);
+canvas.addEventListener("mousedown", getPosition, false);
+canvas.addEventListener("mouseup", getPosition2, false);
+
+var mouseIsDown = false;
+var pX = 0;
+var pY = 0;
+var pW = 50;
+var pH = 70;
+var pYV = -20;
+var y = 720;
+var platforms = [];
+var platformH = 30;
+var platformW = 100;
+var isPlaying = false;
+var scrolling = false;
+var shrek = new Image();
+var height = 0;
+var arrow = new Image();
+var best = 0;
+arrow.src = "arrow.png";
+
+
+function getPosition2(event)
+{
+	mouseIsDown = false;
+}
+
+function getPosition(event)
+{
+	mouseIsDown = true;
+}
+
+function mouseMoveHandler(e)
+{
+    pX = e.clientX - canvas.offsetLeft;
+    pY = e.clientY - canvas.offsetTop;
+}
+
+function Platform(x,y,type,hits,direction)
+{
+	this.x = x;
+	this.y = y;
+	this.type = type;
+	this.hits = hits;
+	this.direction = direction;
+}
+
+function drawPlatforms()
+{
+	for(i = 0; i < platforms.length; i++)
+	{
+		if(y + pH >= platforms[i].y && y + pH <= platforms[i].y + platformH && 
+		pX + pW >= platforms[i].x && pX <= platforms[i].x + platformW && pYV >= 0 &&
+		!(platforms[i].type == 1 && platforms[i].hits > 0))
+		{
+      if(platforms[i].type == 3)
+      {
+        pYV = -20;
+      }
+      else
+      {
+			  pYV = -16;
+      }
+			platforms[i].hits++;
+		}
+    if(platforms[i].type == 2)
+    {
+      if(platforms[i].x + platformW >= 600)
+      {
+        platforms[i].direction = 1;
+      }
+      if(platforms[i].x <= 0)
+      {
+        platforms[i].direction = 0;
+      }
+      if(platforms[i].direction == 0)
+      {
+        platforms[i].x += 3;
+      }
+      if(platforms[i].direction == 1)
+      {
+        platforms[i].x -= 3;
+      }
+    }
+		if(scrolling)
+		{
+			platforms[i].y += 5;
+			height++;
+		}
+		if(platforms[i].y >=800)
+		{
+			platforms[i].y = 0;
+			platforms[i].x = Math.floor((Math.random() * 500) + 0);
+			platforms[i].type = Math.floor((Math.random() * 5) + 0);
+			platforms[i].hits = 0;
+      platforms[i].direction = Math.floor((Math.random() * 2) + 0);;
+		}
+		if(platforms[i].type == 1||platforms[i].type == 4)
+		{
+			ctx.fillStyle = "red";
+		}
+		ctx.fillStyle = "red";
+		if(platforms[i].type == 1)
+		{
+			ctx.fillStyle = "brown";
+		}
+		if(platforms[i].type == 2)
+		{
+			ctx.fillStyle = "blue";
+		}
+    if(platforms[i].type == 3)
+		{
+			ctx.fillStyle = "green";
+		}
+		if(!(platforms[i].type == 1 && platforms[i].hits > 0))
+		{
+			ctx.fillRect(platforms[i].x,platforms[i].y,platformW,platformH);
+		}
+	}
+	if(y + pH < 800)
+	{
+		pYV +=.5;
+	}
+	if(y >= 800)
+	{
+		isPlaying = false;
+		if(height > best)
+		{
+			best = height;
+		}
+	}
+	y += pYV;
+}
+
+function drawScore()
+{
+  ctx.fillStyle = "black";
+  ctx.font = "30px Arial";
+  ctx.fillText("HEIGHT: " + height, 10, 50);
+}
+
+function scroll()
+{
+	if(y < 300)
+	{
+		scrolling = true;
+	}
+	else
+	{
+		scrolling = false;
+	}
+}
+
+function drawPlayer()
+{
+	if(pX<0)
+	{
+		pX = 0;
+	}
+	if(pX>550)
+	{
+		pX = 550;
+	}
+	
+	ctx.fillStyle = "green";
+	ctx.fillRect(pX, y, pW, pH);
+	if(y+pH<=0)
+	{
+		ctx.drawImage(arrow,pX,0,50,70);
+	}
+}
+
+function menu()
+{
+	ctx.fillStyle = "red";
+	ctx.font = "100px Arial";
+	ctx.fillText("JUMPS", 125, 200);
+	
+	ctx.fillStyle = "black";
+	ctx.font = "40px Arial";
+	ctx.fillText("Best score: " + best, 125, 300);
+	
+	ctx.fillStyle = "green";
+	ctx.fillRect(200, 400, 200, 100);
+	
+	ctx.fillStyle = "black";
+	ctx.font = "30px Arial";
+	ctx.fillText("START", 250, 460);
+	
+	ctx.fillStyle = "red";
+	ctx.fillRect(50,600,platformW,platformH);
+	ctx.fillStyle = "black";
+	ctx.font = "20px Arial";
+	ctx.fillText("Your normal every day", 50, 650);
+	ctx.fillText("platform", 50, 670);
+	
+	ctx.fillStyle = "brown";
+	ctx.fillRect(50,700,platformW,platformH);
+	ctx.fillStyle = "black";
+	ctx.font = "20px Arial";
+	ctx.fillText("Breaks after one jump", 50, 750);
+	
+	ctx.fillStyle = "blue";
+	ctx.fillRect(300,600,platformW,platformH);
+	ctx.fillStyle = "black";
+	ctx.font = "20px Arial";
+	ctx.fillText("Moves left and right", 300, 650);
+	
+	ctx.fillStyle = "green";
+	ctx.fillRect(300,700,platformW,platformH);
+	ctx.fillStyle = "black";
+	ctx.font = "20px Arial";
+	ctx.fillText("Higher bounces", 300, 750);
+	
+	if(pX >= 200 && pX <= 400 &&
+	pY >= 400 && pY <= 500)
+	{
+		ctx.fillStyle = "white";
+		ctx.font = "30px Arial";
+		ctx.fillText("START", 250, 460);
+		if(mouseIsDown)
+		{
+			platforms[0] = new Platform(100,700,0,0,0);
+			platforms[1] = new Platform(200,500,0,0,0);
+			platforms[2] = new Platform(300,300,0,0,0);
+			platforms[3] = new Platform(100,100,0,0,0);
+			y = 700;
+			pYV = -20;
+			height = 0;
+			isPlaying = true;
+		}
+	}
+}
+
+function draw()
+{
+	ctx.clearRect(0,0,600,800);
+	if(isPlaying)
+	{
+		scroll();
+		drawPlatforms();
+		drawPlayer();
+		drawScore();
+	}
+	else
+	{
+		menu();
+	}
+}
+setInterval(draw, 10);
+</script>
+</body>
+</html>
