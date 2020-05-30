@@ -3,20 +3,30 @@
 <head>
 	<style>
 	body {
-	  background-color: #a3a3a3;
+	  background-color: white;
 	}
+	
 	*{padding: 0; margin:0;}
 	canvas{ background: #eeeeee; display: block; margin: 0 auto;}
+	
 	.center {
-	  margin: auto;
-	  width: 35%;
-	  padding: 10px;
+		margin: auto;
+		width: 1500px;
+		padding: 10px;
+		background-color: gray; /* Green */
 	}
+	
+	.bar {
+		background-color: black;
+		height: 48px;
+	}
+	
 	.btn-group .button {
-	  background-color: #4CAF50; /* Green */
+	  background-color: black;
+	  width: 100px;
 	  border: none;
 	  color: white;
-	  padding: 15px 32px;
+	  padding: 15px 0px;
 	  text-align: center;
 	  text-decoration: none;
 	  display: inline-block;
@@ -26,24 +36,32 @@
 	}
 
 	.btn-group .button:hover {
-	  background-color: #3e8e41;
+	  background-color: red;
 	}
 	</style>
 </head>
 	<body>
 		<div class="center">
-			<div class="btn-group">
-			  <button class="button">Button</button>
-			  <button class="button">Button</button>
-			  <button class="button">Button</button>
-			  <button class="button">Button</button>
+			<div class="bar">
+				<div class="btn-group">
+					<button class="button" onclick="home()">Home</button>
+					<button class="button">Games</button>
+					<button class="button">FAQ</button>
+					<button class="button">Social</button>
+				</div>
 			</div>
 			<h1>Adam Reyero</h1>
 			<p>CS student, musician, scout, and epic gamr.</p>
-			<p></p>
 			<h1>Games</h1>
 			<p><a href="https://adamreyero.github.io/ripoffFighter/" target="_blank">Fighting Game</a></p>
 			<p><a href="https://adamreyero.github.io/jumps/" target="_blank">Jumps</a></p>
+			
 		</div>
+		<script>
+			function home()
+			{
+				window.open('https://adamreyero.com/', '_self');
+			}
+		</script>
 	</body>
 </html>
