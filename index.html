@@ -45,7 +45,7 @@
 			<div class="bar">
 				<div class="btn-group">
 					<button class="button" onclick="home()">Home</button>
-					<button class="button">Games</button>
+					<button class="button" onclick="games()">Games</button>
 					<button class="button">FAQ</button>
 					<button class="button">Social</button>
 				</div>
@@ -56,6 +56,10 @@
 		</div>
 		<script>
 			function home()
+			{
+				window.open('https://adamreyero.com', '_self');
+			}
+			function games()
 			{
 				window.open('https://adamreyero.com/games.html', '_self');
 			}
